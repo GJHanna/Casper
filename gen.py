@@ -33,25 +33,47 @@ def generate_password(length,
         exclude: str
             Filter out spcific characters
         
+        Raises
+        ------
+        ValueError:
+            Raised when the specifications characters are greater than the password's length
+
         Returns
         ------
         str
             a str of the password
     """
+    lower_case_letters = (length - (upper_case_letters + punctuations + digit_number))
+    password = ''
 
-    lower_case_letters = length - (upper_case_letters + punctuations + digit_number)
-    
-    filtered_punctuation = punctuation.translate({ord(i): None for i in exclude})
+    try:
+        if lower_case_letters < 0:
+            raise ValueError("Specification cannot be greater than the password's length.")
+        
+        filtered_punctuation = punctuation.translate({ord(i): None for i in exclude})
+            
+        password_list = [choice(ascii_uppercase) for i in range(upper_case_letters)]
+        password_list += [choice(filtered_punctuation) for i in range(punctuations)]
+        password_list += [choice(digits) for i in range(digit_number)]
+        password_list += [choice(ascii_lowercase) for i in range(lower_case_letters)]
+        
+        shuffle(password_list)
+        password = ''.join(password_list)
 
-    password = [choice(ascii_uppercase) for i in range(upper_case_letters)]
-    password += [choice(filtered_punctuation) for i in range(punctuations)]
-    password += [choice(digits) for i in range(digit_number)]
-    password += [choice(ascii_lowercase) for i in range(lower_case_letters)]
+    except ValueError as ve:
+        print(ve)
+    except Exception as e:
+        print(e.args)
 
-    shuffle(password)
-    
-    return ''.join(password)
-
+    finally:
+        return password
+        
 
 args = parser.parse_args()
 print(generate_password(args.length, args.upper_case, args.punctuations, args.digit_number, args.exclude))
+
+
+
+
+
+
