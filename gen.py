@@ -17,8 +17,28 @@ def generate_password(length,
                       upper_case_letters,
                       punctuations,
                       digit_number,
-                      exclude=''):
-    
+                      exclude):
+    """Generates a random password for specific criteria
+       
+        Parameters
+        ----------
+        length : int
+            The length of the password
+        upper_case_letters : int
+            The number of upper case letters in the password
+        punctuations: int
+            The number of punctuations in the password
+        digit_number : int
+            The number of digits in the password
+        exclude: str
+            Filter out spcific characters
+        
+        Returns
+        ------
+        str
+            a str of the password
+    """
+
     lower_case_letters = length - (upper_case_letters + punctuations + digit_number)
     
     filtered_punctuation = punctuation.translate({ord(i): None for i in exclude})
